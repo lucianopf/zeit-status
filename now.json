@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "public": false,
+  "name": "zeit-status",
+  "alias": ["zeit-status.now.sh"],
+  "builds": [
+    { "src": "webhook.js", "use": "@now/node" },
+    { "src": "manage.js", "use": "@now/node" },
+    { "src": "integration.js", "use": "@now/node" }
+  ],
+  "routes": [
+    { "src": "/webhook", "dest": "/webhook.js" },
+    { "src": "/", "dest": "/manage.js" },
+    { "src": "/uihook", "dest": "/integration.js" }
+  ],
+  "env": {
+    "WEBHOOK_PASSWORD": "@zeit-status-webhook-password",
+    "WEBHOOK_ID": "@zeit-status-webhook-id",
+    "DATABASE_BASE_URL": "@zeit-status-database-base-url",
+    "CURRENT_BASE_URL": "https://zeit-status.now.sh"
+  }
+}

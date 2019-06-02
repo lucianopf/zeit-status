@@ -17,6 +17,9 @@
     "WEBHOOK_PASSWORD": "@zeit-status-webhook-password",
     "WEBHOOK_ID": "@zeit-status-webhook-id",
     "DATABASE_BASE_URL": "@zeit-status-database-base-url",
-    "CURRENT_BASE_URL": "https://zeit-status.now.sh"
+    "CURRENT_BASE_URL": "https://zeit-status.now.sh",
+    "SLACK_CLIENT_ID": "@zeit-status-slack-client-id",
+    "SLACK_CLIENT_SECRET": "@zeit-status-slack-secret-id",
+    "SLACK_REDIRECT_URI": "@zeit-status-slack-redirect-uri"
   }
 }

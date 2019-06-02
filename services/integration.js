@@ -1,10 +1,10 @@
 const fetch = require('node-fetch')
 
-async function createWebhook (integrationId, slackurl) {
+async function createWebhook (configurationId, slackurl) {
   const options = {
     method: 'POST',
     data: {
-      integrationId,
+      integrationId: configurationId,
       webhookUrl: slackurl,
     },
   }
@@ -32,11 +32,11 @@ async function createWebhook (integrationId, slackurl) {
 	return res.json()
 }
 
-async function deleteWebhook (integrationId) {
+async function deleteWebhook (configurationId) {
   const options = {
     method: 'DELETE',
   }
-	let apiPath = `${process.env.CURRENT_BASE_URL}/?integrationId=${integrationId}`
+	let apiPath = `${process.env.CURRENT_BASE_URL}/?integrationId=${configurationId}`
 
 	options.headers = options.headers || {}
 

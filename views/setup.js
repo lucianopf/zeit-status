@@ -1,16 +1,24 @@
 const { htm } = require('@zeit/integration-utils')
 
-module.exports = () => htm`
+const { SLACK_CLIENT_ID } = process.env
+
+const slackAuthorizeUrl = configurationId => `https://slack.com/oauth/authorize?client_id=${SLACK_CLIENT_ID}&scope=incoming-webhook team:read&redirect_uri=https://zeit.co/dashboard/integrations/${configurationId}`
+
+const zeitStatusTwitterUrl = 'https://twitter.com/zeit_status'
+
+module.exports = (configurationId) => htm`
   <Page>
-    <H1>Setup:</H1>
-    <P>In order to subscribe to @zeit_status tweets at your slack we'll need a Slack webhook url</P>
-    <Container>
-      <Input label="Slack webhook url" name="slackurl" type="text"/>
-    </Container>
-    <Container>
-      <Button action="submit">
-        Login
-      </Button>
-    </Container>
+    <Box display="flex" flexDirection="column" justifyContent="center" textAlign="center">
+      <H1>Welcome to zeit-status integration</H1>
+      <P>
+        In order for us to send you <Link href=${zeitStatusTwitterUrl} target="_blank">@zeit_status</Link> tweets we'll need you to authorize this integration at your Slack
+      </P>
+      <BR />
+      <Box display="flex" marginTop="10px" justifyContent="center">
+        <Link href=${slackAuthorizeUrl(configurationId)}>
+          <Button>Connect to Slack</Button>
+        </Link>
+      </Box>
+    </Box>
   </Page>
 `

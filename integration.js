@@ -6,6 +6,9 @@ const {
 	deleteWebhook,
 } = require('./services/integration')
 const {
+	exchangeToken,
+} = require('./services/slack')
+const {
   setupView,
   sucessView,
 } = require('./views')
@@ -13,28 +16,28 @@ const {
 
 module.exports = withUiHook (async ({ payload, zeitClient }) => {
 	const {
-		clientState,
     action,
-    integrationId,
-  } = payload
-  
-	const {
-		slackurl,
-	} = clientState
+		configurationId,
+		query,
+	} = payload
+	
+	const isSlackRedirect = query && query.code
 
-	const isSubmitAction = action === 'submit'
-	const isResetAction = action === 'reset'
-	const isValidPayload = slackurl && slackurl.length
+	if (isSlackRedirect) {
+		const { incoming_webhook } = await exchangeToken(query.code, configurationId)
+		if (incoming_webhook && incoming_webhook.url) {
+			const slackurl = incoming_webhook.url
+			await createWebhook(configurationId, slackurl)
+			await zeitClient.setMetadata({ done: true })
+		}
+	}
 
-	if (isSubmitAction && isValidPayload) {
-    await createWebhook(integrationId, slackurl)
-    await zeitClient.setMetadata({ done: true })
-	} else if (isResetAction) {
-    await deleteWebhook(integrationId)
+	if (action === 'reset') {
+    await deleteWebhook(configurationId)
 		await zeitClient.setMetadata({ done: false })
 	}
 
 	const store = await zeitClient.getMetadata()
 
-  return store.done ? sucessView() : setupView()
+  return store.done ? sucessView() : setupView(configurationId)
 })
